@@ -136,6 +136,11 @@
       }
     }
 
+    function normalizeString(str) {
+      // Entfernt alle nicht-alphabetischen Zeichen und wandelt in Kleinbuchstaben um
+      return str.replace(/[^\w\s]/g, "").toLowerCase().trim();
+    }
+
     function nextWord() {
       shuffle(refrains);
       currentRefrain = refrains[Math.floor(Math.random() * refrains.length)];
@@ -143,7 +148,7 @@
       document.getElementById("feedbackArea").textContent = "";
 
       const songText = currentDirection === "en-de" ? currentRefrain.en : currentRefrain.de;
-      const words = songText.split(' ');
+      const words = songText.split(' ').map(word => normalizeString(word));
       currentWord = words[Math.floor(Math.random() * words.length)];
 
       document.getElementById("songText").textContent = `Was bedeutet: "${currentWord}"?`;
@@ -151,12 +156,12 @@
 
     function checkTranslation() {
       const correctText = currentDirection === "en-de" ? currentRefrain.de : currentRefrain.en;
-      const words = correctText.split(' ');
+      const words = correctText.split(' ').map(word => normalizeString(word));
       const correctWord = words.find(word => word === currentWord);
       const feedback = document.getElementById("feedbackArea");
 
       if (correctWord) {
-        feedback.innerHTML = `✅ Richtig wäre:<br><strong>${correctWord}</strong>`;
+        feedback.innerHTML = `✅ Richtig wäre:<br><strong>${currentWord}</strong>`;
       } else {
         feedback.innerHTML = `❌ Leider falsch. Versuch es noch einmal!`;
       }
