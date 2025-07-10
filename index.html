@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎶 Vokabeltrainer</title>
+  <style>
+    body {
+      font-family: Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #f9f9f9, #d8f3ff);
+      text-align: center;
+      padding: 2em;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #2a7de1;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 2em;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .song-text {
+      font-size: 1.4em;
+      margin: 1em 0 0.5em;
+      background: #e0f7fa;
+      padding: 1em;
+      border-radius: 10px;
+    }
+
+    .artist {
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 1em;
+    }
+
+    button {
+      padding: 0.7em 1.2em;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 0.5em;
+    }
+
+    .check-btn {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .next-btn {
+      background-color: #2196f3;
+      color: white;
+    }
+
+    .radio-group {
+      margin-bottom: 1em;
+      font-size: 1.1em;
+    }
+
+    .feedback {
+      font-size: 1.2em;
+      margin-top: 1em;
+    }
+
+    .word {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎶 Vokabeltrainer 🌈</h1>
+
+    <div class="radio-group">
+      <label><input type="radio" name="direction" value="en-de" checked> 🇬🇧 Englisch → Deutsch</label>
+      <label><input type="radio" name="direction" value="de-en"> 🇩🇪 Deutsch → Englisch</label>
+    </div>
+
+    <div class="song-text" id="songText">🎤 Refrain erscheint hier...</div>
+    <div class="artist" id="artistName">👩‍🎤 Künstler...</div>
+
+    <div>
+      <button class="check-btn" onclick="checkTranslation()">Übersetzung anzeigen</button>
+      <button class="next-btn" onclick="nextWord()">Nächster 🎵</button>
+    </div>
+
+    <div class="feedback" id="feedbackArea"></div>
+  </div>
+
+  <script>
+    const refrains = [
+      { en: "Let it be, let it be, let it be, let it be", de: "Lass es sein, lass es sein, lass es sein, lass es sein", artist: "The Beatles" },
+      { en: "Imagine all the people living life in peace", de: "Stell dir vor, alle Menschen leben in Frieden", artist: "John Lennon" },
+      { en: "Hey Jude, don't make it bad", de: "He Man, mach es nicht schlimmer", artist: "The Beatles" },
+      { en: "We all live in a yellow submarine", de: "Wir alle leben in einem gelben U-Boot", artist: "The Beatles" },
+      { en: "Yesterday, all my troubles seemed so far away", de: "Gestern schien all mein Kummer so weit entfernt", artist: "The Beatles" },
+      { en: "Because I'm happy, clap along if you feel like a room without a roof", de: "Denn ich bin glücklich, klatsch mit, wenn du dich frei wie ohne Dach fühlst", artist: "Pharrell Williams" },
+      { en: "Shake it off, shake it off", de: "Schüttel es ab, schüttel es ab", artist: "Taylor Swift" },
+      { en: "I'm yours", de: "Ich gehöre dir", artist: "Jason Mraz" },
+      { en: "What a wonderful world", de: "Was für eine wunderbare Welt", artist: "Louis Armstrong" },
+      { en: "I got that sunshine in my pocket", de: "Ich hab den Sonnenschein in meiner Tasche", artist: "Justin Timberlake" },
+      { en: "We will, we will rock you", de: "Wir werden, wir werden dich rocken", artist: "Queen" },
+      { en: "Don't worry, be happy", de: "Sei nicht traurig, sei glücklich", artist: "Bobby McFerrin" },
+      { en: "Hello from the other side", de: "Hallo von der anderen Seite", artist: "Adele" },
+      { en: "Never mind, I'll find someone like you", de: "Macht nichts, ich werde jemanden finden wie dich", artist: "Adele" },
+      { en: "You are my sunshine, my only sunshine", de: "Du bist mein Sonnenschein, mein einziger Sonnenschein", artist: "Traditional" },
+      { en: "I got the eye of the tiger, a fighter, dancing through the fire", de: "Ich habe das Auge des Tigers, bin ein Kämpfer, tanze durch das Feuer", artist: "Katy Perry" },
+      { en: "You can stand under my umbrella", de: "Du kannst unter meinem Regenschirm stehen", artist: "Rihanna" },
+      { en: "Love, love me do", de: "Liebe, liebe mich", artist: "The Beatles" }
+    ];
+
+    let currentDirection = "en-de";
+    let currentRefrain = {};
+    let currentWord = "";
+
+    document.querySelectorAll('input[name="direction"]').forEach(el => {
+      el.addEventListener("change", () => {
+        currentDirection = document.querySelector('input[name="direction"]:checked').value;
+        nextWord();
+      });
+    });
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function nextWord() {
+      shuffle(refrains);
+      currentRefrain = refrains[Math.floor(Math.random() * refrains.length)];
+
+      document.getElementById("feedbackArea").textContent = "";
+      const songText = currentDirection === "en-de" ? currentRefrain.en : currentRefrain.de;
+      const words = songText.split(' ');
+      currentWord = words[Math.floor(Math.random() * words.length)];
+
+      document.getElementById("songText").textContent = `Was bedeutet: "${currentWord}"?`;
+    }
+
+    function checkTranslation() {
+      const correctText = currentDirection === "en-de" ? currentRefrain.de : currentRefrain.en;
+      const correctWord = correctText.split(' ').find(word => word === currentWord);
+      const feedback = document.getElementById("feedbackArea");
+
+      feedback.innerHTML = `✅ Richtig wäre:<br><strong>${correctWord}</strong>`;
+    }
+
+    window.onload = nextWord;
+  </script>
+</body>
+</html>
