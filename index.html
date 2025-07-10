@@ -160,11 +160,8 @@
       const correctWord = words.find(word => word === currentWord);
       const feedback = document.getElementById("feedbackArea");
 
-      if (correctWord) {
-        feedback.innerHTML = `✅ Richtig wäre:<br><strong>${currentWord}</strong>`;
-      } else {
-        feedback.innerHTML = `❌ Leider falsch. Versuch es noch einmal!`;
-      }
+      // Zeige die richtige Antwort
+      feedback.innerHTML = `✅ Die richtige Antwort wäre: <strong>${currentWord}</strong>`;
     }
 
     window.onload = nextWord;
