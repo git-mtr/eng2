@@ -141,6 +141,7 @@
       currentRefrain = refrains[Math.floor(Math.random() * refrains.length)];
 
       document.getElementById("feedbackArea").textContent = "";
+
       const songText = currentDirection === "en-de" ? currentRefrain.en : currentRefrain.de;
       const words = songText.split(' ');
       currentWord = words[Math.floor(Math.random() * words.length)];
@@ -150,10 +151,15 @@
 
     function checkTranslation() {
       const correctText = currentDirection === "en-de" ? currentRefrain.de : currentRefrain.en;
-      const correctWord = correctText.split(' ').find(word => word === currentWord);
+      const words = correctText.split(' ');
+      const correctWord = words.find(word => word === currentWord);
       const feedback = document.getElementById("feedbackArea");
 
-      feedback.innerHTML = `✅ Richtig wäre:<br><strong>${correctWord}</strong>`;
+      if (correctWord) {
+        feedback.innerHTML = `✅ Richtig wäre:<br><strong>${correctWord}</strong>`;
+      } else {
+        feedback.innerHTML = `❌ Leider falsch. Versuch es noch einmal!`;
+      }
     }
 
     window.onload = nextWord;
