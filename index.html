@@ -100,7 +100,7 @@
     const refrains = [
       { en: "Let it be, let it be, let it be, let it be", de: "Lass es sein, lass es sein, lass es sein, lass es sein", artist: "The Beatles" },
       { en: "Imagine all the people living life in peace", de: "Stell dir vor, alle Menschen leben in Frieden", artist: "John Lennon" },
-      { en: "Hey Jude, don't make it bad", de: "He Man, mach es nicht schlimmer", artist: "The Beatles" },
+      { en: "Hey Jude, don't make it bad", de: "Hey Jude, mach es nicht schlimmer", artist: "The Beatles" },
       { en: "We all live in a yellow submarine", de: "Wir alle leben in einem gelben U-Boot", artist: "The Beatles" },
       { en: "Yesterday, all my troubles seemed so far away", de: "Gestern schien all mein Kummer so weit entfernt", artist: "The Beatles" },
       { en: "Because I'm happy, clap along if you feel like a room without a roof", de: "Denn ich bin glücklich, klatsch mit, wenn du dich frei wie ohne Dach fühlst", artist: "Pharrell Williams" },
@@ -137,7 +137,6 @@
     }
 
     function normalizeString(str) {
-      // Entfernt alle nicht-alphabetischen Zeichen und wandelt in Kleinbuchstaben um
       return str.replace(/[^\w\s]/g, "").toLowerCase().trim();
     }
 
@@ -156,12 +155,10 @@
 
     function checkTranslation() {
       const correctText = currentDirection === "en-de" ? currentRefrain.de : currentRefrain.en;
-      const words = correctText.split(' ').map(word => normalizeString(word));
-      const correctWord = words.find(word => word === currentWord);
       const feedback = document.getElementById("feedbackArea");
 
-      // Zeige die richtige Antwort
-      feedback.innerHTML = `✅ : <strong>${currentWord}</strong>`;
+      // Zeige die vollständige Übersetzung an
+      feedback.innerHTML = `✅ : <strong>${correctText}</strong>`;
     }
 
     window.onload = nextWord;
