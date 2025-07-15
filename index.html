@@ -181,8 +181,46 @@
       { "en": "Love", "de": "Liebe" },
       { "en": "me", "de": "mich" },
       { "en": "do", "de": "tun" },
-      { "en": "I", "de": "ich" },
+      { "en": "I", "de": "ich" }
     ];
+
+    let currentWordIndex = 0;
+
+    // Funktion, um die aktuelle Übersetzung anzuzeigen
+    function checkTranslation() {
+      const wordPair = refrains[currentWordIndex];
+      const direction = document.querySelector('input[name="direction"]:checked').value;
+
+      let translation = "";
+      if (direction === "en-de") {
+        translation = wordPair.de;
+      } else {
+        translation = wordPair.en;
+      }
+
+      document.getElementById("feedbackArea").innerText = `Die Übersetzung von "${wordPair[direction.split('-')[0]]}" ist: ${translation}`;
+    }
+
+    // Funktion, um das nächste Wort anzuzeigen
+    function nextWord() {
+      currentWordIndex = (currentWordIndex + 1) % refrains.length;
+      const currentWord = refrains[currentWordIndex];
+      const direction = document.querySelector('input[name="direction"]:checked').value;
+
+      let displayWord = "";
+      if (direction === "en-de") {
+        displayWord = currentWord.en;
+      } else {
+        displayWord = currentWord.de;
+      }
+
+      document.getElementById("songText").innerText = displayWord;
+      document.getElementById("feedbackArea").innerText = "";
+    }
+
+    // Initiales Wort anzeigen
+    nextWord();
   </script>
 </body>
 </html>
+
