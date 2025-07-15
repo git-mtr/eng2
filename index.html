@@ -85,6 +85,7 @@
       <label><input type="radio" name="direction" value="de-en"> 🇩🇪 Deutsch → Englisch</label>
     </div>
 
+    <div class="song-text" id="songText">Lade Songtext...</div>
 
     <div>
       <button class="check-btn" onclick="checkTranslation()">Übersetzung anzeigen</button>
@@ -96,137 +97,94 @@
 
   <script>
     const refrains = [
-  { "en": "Let", "de": "Lass" },
-  { "en": "it", "de": "es" },
-  { "en": "be", "de": "sein" },
-  { "en": "Imagine", "de": "Stell dir vor" },
-  { "en": "all", "de": "alle" },
-  { "en": "the", "de": "die" },
-  { "en": "people", "de": "Menschen" },
-  { "en": "living", "de": "leben" },
-  { "en": "life", "de": "Leben" },
-  { "en": "in", "de": "in" },
-  { "en": "peace", "de": "Frieden" },
-  { "en": "Hey", "de": "Hey" },
-  { "en": "don't", "de": "nicht tun" },
-  { "en": "make", "de": "machen" },
-  { "en": "bad", "de": "schlecht" },
-  { "en": "We", "de": "Wir" },
-  { "en": "yellow", "de": "gelb" },
-  { "en": "submarine", "de": "U-Boot" },
-  { "en": "Yesterday", "de": "Gestern" },
-  { "en": "my", "de": "mein" },
-  { "en": "trouble", "de": "Problem" },
-  { "en": "so", "de": "so" },
-  { "en": "far", "de": "weit" },
-  { "en": "away", "de": "entfernt" },
-  { "en": "because", "de": "denn oder weil" },
-  { "en": "I'm", "de": "ich bin" },
-  { "en": "happy", "de": "glücklich" },
-  { "en": "clap", "de": "klatschen" },
-  { "en": "along", "de": "entlang" },
-  { "en": "if", "de": "wenn" },
-  { "en": "you", "de": "du" },
-  { "en": "feel", "de": "fühlen" },
-  { "en": "like", "de": "wie oder mögen" },
-  { "en": "a", "de": "ein" },
-  { "en": "room", "de": "Raum" },
-  { "en": "without", "de": "ohne" },
-  { "en": "with", "de": "mit" },
-  { "en": "roof", "de": "Dach" },
-  { "en": "Shake", "de": "schütteln" },
-  { "en": "off", "de": "ab oder aus" },
-  { "en": "I'm", "de": "Ich bin" },
-  { "en": "your", "de": "dein" },
-  { "en": "you", "de": "du" },
-  { "en": "What", "de": "Was" },
-  { "en": "wonderful", "de": "wunderbar" },
-  { "en": "beautiful", "de": "schön" },
-  { "en": "world", "de": "Welt" },
-  { "en": "have", "de": "haben" },
-  { "en": "sunshine", "de": "Sonnenschein" },
-  { "en": "in", "de": "in" },
-  { "en": "my", "de": "mein" },
-  { "en": "pocket", "de": "Tasche" },
-  { "en": "will", "de": "werden" },
-  { "en": "rock", "de": "rocken" },
-  { "en": "don't ...", "de": "nicht ..." },
-  { "en": "worry", "de": "traurig" },
-  { "en": "be", "de": "sei" },
-  { "en": "happy", "de": "glücklich" },
-  { "en": "Hello", "de": "Hallo" },
-  { "en": "from", "de": "von" },
-  { "en": "the", "de": "der, die, das " },
-  { "en": "other", "de": "anderen" },
-  { "en": "side", "de": "Seite" },
-  { "en": "never", "de": "niemals" },
-  { "en": "I'll", "de": "ich werde" },
-  { "en": "find", "de": "finden" },
-  { "en": "someone", "de": "jemanden" },
-  { "en": "like", "de": "wie, mögen" },
-  { "en": "you", "de": "du" },
-  { "en": "are", "de": "bist" },
-  { "en": "my", "de": "mein" },
-  { "en": "sunshine", "de": "Sonnenschein" },
-  { "en": "eye", "de": "Auge" },
-  { "en": "tiger", "de": "des Tigers" },
-  { "en": "fighter", "de": "Kämpfer" },
-  { "en": "dancing", "de": "tanzen" },
-  { "en": "through", "de": "durch" },
-  { "en": "fire", "de": "Feuer" },
-  { "en": "can", "de": "können" },
-  { "en": "stand", "de": "stehen" },
-  { "en": "under", "de": "unter" },
-  { "en": "umbrella", "de": "Regenschirm" },
-  { "en": "Love", "de": "Liebe" },
-  { "en": "me", "de": "mich" },
-  { "en": "do", "de": "tun" }
-];
-
-    let currentDirection = "en-de";
-    let currentRefrain = {};
-    let currentWord = "";
-
-    document.querySelectorAll('input[name="direction"]').forEach(el => {
-      el.addEventListener("change", () => {
-        currentDirection = document.querySelector('input[name="direction"]:checked').value;
-        nextWord();
-      });
-    });
-
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    function normalizeString(str) {
-      return str.replace(/[^\w\s]/g, "").toLowerCase().trim();
-    }
-
-    function nextWord() {
-      shuffle(refrains);
-      currentRefrain = refrains[Math.floor(Math.random() * refrains.length)];
-
-      document.getElementById("feedbackArea").textContent = "";
-
-      const songText = currentDirection === "en-de" ? currentRefrain.en : currentRefrain.de;
-      const words = songText.split(' ').map(word => normalizeString(word));
-      currentWord = words[Math.floor(Math.random() * words.length)];
-
-      document.getElementById("songText").textContent = `Was bedeutet: "${currentWord}"?`;
-    }
-
-    function checkTranslation() {
-      const correctText = currentDirection === "en-de" ? currentRefrain.de : currentRefrain.en;
-      const feedback = document.getElementById("feedbackArea");
-
-      // Zeige die vollständige Übersetzung an
-      feedback.innerHTML = `✅ : <strong>${correctText}</strong>`;
-    }
-
-    window.onload = nextWord;
+      { "en": "Let", "de": "Lass" },
+      { "en": "it", "de": "es" },
+      { "en": "be", "de": "sein" },
+      { "en": "Imagine", "de": "Stell dir vor" },
+      { "en": "all", "de": "alle" },
+      { "en": "the", "de": "die" },
+      { "en": "people", "de": "Menschen" },
+      { "en": "living", "de": "leben" },
+      { "en": "life", "de": "Leben" },
+      { "en": "in", "de": "in" },
+      { "en": "peace", "de": "Frieden" },
+      { "en": "Hey", "de": "Hey" },
+      { "en": "don't", "de": "nicht tun" },
+      { "en": "make", "de": "machen" },
+      { "en": "bad", "de": "schlecht" },
+      { "en": "We", "de": "Wir" },
+      { "en": "yellow", "de": "gelb" },
+      { "en": "submarine", "de": "U-Boot" },
+      { "en": "Yesterday", "de": "Gestern" },
+      { "en": "my", "de": "mein" },
+      { "en": "trouble", "de": "Problem" },
+      { "en": "so", "de": "so" },
+      { "en": "far", "de": "weit" },
+      { "en": "away", "de": "entfernt" },
+      { "en": "because", "de": "denn oder weil" },
+      { "en": "I'm", "de": "ich bin" },
+      { "en": "happy", "de": "glücklich" },
+      { "en": "clap", "de": "klatschen" },
+      { "en": "along", "de": "entlang" },
+      { "en": "if", "de": "wenn" },
+      { "en": "you", "de": "du" },
+      { "en": "feel", "de": "fühlen" },
+      { "en": "like", "de": "wie oder mögen" },
+      { "en": "a", "de": "ein" },
+      { "en": "room", "de": "Raum" },
+      { "en": "without", "de": "ohne" },
+      { "en": "with", "de": "mit" },
+      { "en": "roof", "de": "Dach" },
+      { "en": "Shake", "de": "schütteln" },
+      { "en": "off", "de": "ab oder aus" },
+      { "en": "I'm", "de": "Ich bin" },
+      { "en": "your", "de": "dein" },
+      { "en": "you", "de": "du" },
+      { "en": "What", "de": "Was" },
+      { "en": "wonderful", "de": "wunderbar" },
+      { "en": "beautiful", "de": "schön" },
+      { "en": "world", "de": "Welt" },
+      { "en": "have", "de": "haben" },
+      { "en": "sunshine", "de": "Sonnenschein" },
+      { "en": "in", "de": "in" },
+      { "en": "my", "de": "mein" },
+      { "en": "pocket", "de": "Tasche" },
+      { "en": "will", "de": "werden" },
+      { "en": "rock", "de": "rocken" },
+      { "en": "don't ...", "de": "nicht ..." },
+      { "en": "worry", "de": "traurig" },
+      { "en": "be", "de": "sei" },
+      { "en": "happy", "de": "glücklich" },
+      { "en": "Hello", "de": "Hallo" },
+      { "en": "from", "de": "von" },
+      { "en": "the", "de": "der, die, das " },
+      { "en": "other", "de": "anderen" },
+      { "en": "side", "de": "Seite" },
+      { "en": "never", "de": "niemals" },
+      { "en": "I'll", "de": "ich werde" },
+      { "en": "find", "de": "finden" },
+      { "en": "someone", "de": "jemanden" },
+      { "en": "like", "de": "wie, mögen" },
+      { "en": "you", "de": "du" },
+      { "en": "are", "de": "bist" },
+      { "en": "my", "de": "mein" },
+      { "en": "sunshine", "de": "Sonnenschein" },
+      { "en": "eye", "de": "Auge" },
+      { "en": "tiger", "de": "des Tigers" },
+      { "en": "fighter", "de": "Kämpfer" },
+      { "en": "dancing", "de": "tanzen" },
+      { "en": "through", "de": "durch" },
+      { "en": "fire", "de": "Feuer" },
+      { "en": "can", "de": "können" },
+      { "en": "stand", "de": "stehen" },
+      { "en": "under", "de": "unter" },
+      { "en": "umbrella", "de": "Regenschirm" },
+      { "en": "Love", "de": "Liebe" },
+      { "en": "me", "de": "mich" },
+      { "en": "do", "de": "tun" },
+      { "en": "I", "de": "ich" },
+      { "en": "I", "de": "Ich" },
+    ];
   </script>
 </body>
 </html>
